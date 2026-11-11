@@ -1,0 +1,81 @@
+/* Commons motion layer. Content is visible at rest; html.m-on (set by motion.js
+   only when motion is allowed) arms the entrance states. */
+@property --m { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
+:root { --ease-soft: cubic-bezier(.19, 1, .22, 1); }
+
+/* ---------- 1. Hero load sequence ---------- */
+.m-on .vd-hero__photo img { animation: heroSettle 1800ms var(--ease-soft) both; }
+@keyframes heroSettle { from { transform: scale(1.12); } to { transform: scale(1); } }
+.m-on .vd-hero .eyebrow { animation: fadeUp 700ms var(--ease-soft) 150ms both; }
+.m-on .vd-hero .chip-face { animation: facePop 800ms var(--ease-spring) both; animation-delay: 650ms; }
+.m-on .vd-hero .line:nth-child(2) .chip-face { animation-delay: 820ms; }
+.m-on .vd-hero .vb-facts { animation: fadeUp 900ms var(--ease-soft) 700ms both; }
+.m-on .vd-ticket, .m-on .ev-ticket { animation: ticketIn 1100ms var(--ease-soft) 420ms backwards; }
+@keyframes facePop { from { transform: scale(0) rotate(-25deg); } to { transform: none; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes ticketIn { from { opacity: 0; transform: translateY(60px) rotate(7deg); } }
+
+/* ---------- 2. Heading mask sweep (Linear) ---------- */
+.m-on .h2.m-mask { --m: -25%; -webkit-mask-image: linear-gradient(90deg, #000 var(--m), transparent calc(var(--m) + 25%)); mask-image: linear-gradient(90deg, #000 var(--m), transparent calc(var(--m) + 25%)); transition: --m 1100ms var(--ease-soft); }
+.m-on .h2.m-mask.in { --m: 100%; }
+
+/* ---------- 3. Words light up on scroll ---------- */
+.m-words .w { transition: color 320ms ease-out; }
+/* Unlit words stay above 3:1 (large text) so the effect never fails contrast mid-scroll. */
+.m-on .m-words .w:not(.lit) { color: #707070; }
+.m-on .m-words .w:has(.rot):not(.lit) { color: inherit; }
+.m-on .m-words .w:not(.lit) .rot { opacity: .8; }
+
+/* ---------- 4. Round table ---------- */
+.m-on .m-seats .vd-seat__in { opacity: 0; transform: rotate(var(--a)) translateY(39cqi) rotate(calc(-1 * var(--a))) scale(.3); transition: opacity 500ms ease-out, transform 1100ms var(--ease-soft); transition-delay: calc(var(--i, 0) * 90ms + 150ms); }
+.m-on .m-seats.in .vd-seat__in { opacity: 1; transform: none; }
+.m-on .m-seats .vd-round__top { transform: scale(.6); opacity: 0; transition: transform 900ms var(--ease-spring), opacity 400ms; }
+.m-on .m-seats.in .vd-round__top { transform: none; opacity: 1; }
+.vd-round__ring { animation: ringTurn 60s linear infinite; }
+@keyframes ringTurn { to { rotate: 360deg; } }
+.vd-seat--filled .vd-seat__img--you { animation: seatFill 700ms var(--ease-spring); }
+@keyframes seatFill { 0% { transform: scale(.4); } 60% { transform: scale(1.12); } 100% { transform: none; } }
+
+/* ---------- 5/6. Scroll-scrubbed room + strip (JS sets clip-path) ---------- */
+.vd-grow__fig { will-change: clip-path; }
+.m-on .vd-grow__fig { width: 100%; max-width: none; border-radius: 0; animation: none; }
+.vd-grow__fig img { transform-origin: 50% 60%; will-change: transform; }
+.vc-split__strip img { will-change: transform; }
+
+/* ---------- 7. Agenda rows + highlighter ---------- */
+.m-on .m-agenda tbody tr { opacity: 0; transform: translateY(16px); transition: opacity 500ms ease-out, transform 700ms var(--ease-soft); transition-delay: calc(var(--r, 0) * 70ms); }
+.m-on .m-agenda.in tbody tr { opacity: 1; transform: none; }
+.m-on .m-agenda tr.is-key td { background: transparent; color: var(--ink); transition: background-color 600ms ease-out 650ms, color 600ms ease-out 650ms; }
+.m-on .m-agenda tr.is-key td span { color: var(--muted); transition: color 600ms ease-out 650ms; }
+.m-on .m-agenda.in tr.is-key td { background: var(--ink); color: var(--dark); }
+.m-on .m-agenda.in tr.is-key td span { color: #4A4A46; }
+@media (max-width: 719px) {
+  .m-on .m-agenda tr.is-key { background: transparent; transition: background-color 600ms ease-out 650ms; }
+  .m-on .m-agenda.in tr.is-key { background: var(--ink); }
+  .m-on .m-agenda.in tr.is-key td { background: none; }
+}
+
+/* ---------- 8. Speakers: pixel blocks step in ---------- */
+.m-on .vb-sp .px { clip-path: inset(100% 0 0 0); transition: clip-path 520ms steps(4, end) 250ms; }
+.m-on .vb-sp.in .px { clip-path: inset(0); }
+.vb-sp { transition: transform var(--dur-base) var(--ease-out); }
+.vb-sp:hover { transform: translateY(-4px); }
+
+/* ---------- 9. Gallery wipes ---------- */
+.m-on .m-wipe { clip-path: inset(97% 0 0 0 round var(--r-lg)); transition: clip-path 1100ms var(--ease-soft); transition-delay: calc(var(--i, 0) * 90ms); }
+.m-on .m-wipe img { transform: scale(1.18); transition: transform 1600ms var(--ease-soft); transition-delay: calc(var(--i, 0) * 90ms); }
+.m-on .m-wipe.in { clip-path: inset(0 0 0 0 round var(--r-lg)); }
+.m-on .m-wipe.in img { transform: none; }
+.m-on .m-wipe.in:hover img { transform: scale(1.04); transition-duration: 800ms; transition-delay: 0s; }
+
+/* ---------- 11. Page-to-page ---------- */
+.vd-ticket, .ev-ticket { view-transition-name: ticket; }
+.site-header { view-transition-name: header; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 320ms; }
+::view-transition-group(ticket) { animation-duration: 520ms; animation-timing-function: var(--ease-soft); }
+
+/* ---------- Off switches ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .vd-round__ring, .vd-seat__img--you { animation: none !important; }
+}
+.motion-paused .vd-round__ring { animation-play-state: paused; }
