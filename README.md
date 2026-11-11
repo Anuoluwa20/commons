@@ -38,11 +38,15 @@ These items are placeholders until you replace them:
 - **Priya Nair and Tobi Adeyemi:** they use stand-in photos (`kemi-alade`, `marcus-lee`). Add `priya-nair.jpg` and `tobi-adeyemi.jpg` and update the `photo` fields.
 - **Story, team names, testimonials and recent-talk names:** all are marked as samples.
 
-## Before deploying
+## Deploying on Vercel
 
-RSVPs are saved to a JSON file (`lib/store.js`). That works on one server, such as a VPS, Railway, Render or Fly with a volume. Serverless hosts like Vercel or Netlify have no writable disk. On those, replace `read` and `write` in `lib/store.js` with a database such as Postgres, Supabase, Upstash or Airtable. The rest of the app stays the same.
+Vercel can't save files, so connect a free Redis database for RSVPs:
 
-To send ticket emails, set the variables in `.env.example`.
+1. In the Vercel project, open **Storage → Create Database → Upstash for Redis** (Marketplace) and connect it to this project. This adds `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (or `KV_REST_API_URL` / `KV_REST_API_TOKEN`) automatically.
+2. In **Settings → Environment Variables**, add `COMMONS_SITE_URL` (your live address) and, optionally, `RESEND_API_KEY` and `COMMONS_FROM_EMAIL` for ticket emails.
+3. Redeploy.
+
+Without Redis the site still works, but RSVPs are kept in temporary storage and are lost whenever Vercel restarts the server. On a normal server (VPS, Railway, Render, Fly), RSVPs go to `./.data/db.json` with no setup.
 
 ## Preview build
 
